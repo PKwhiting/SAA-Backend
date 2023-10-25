@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from simplicarbackend.serializers import UserSerializer, GroupSerializer
-
+from django.http import HttpResponse
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -25,3 +25,6 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 def test(request):
     print("HERE")
+    response = HttpResponse("Your response content")
+    # response['X-Frame-Options'] = 'DENY'  # Set the X-Frame-Options header
+    return response
