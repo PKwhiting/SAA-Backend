@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-u10z(0iblro1$#jd*oonyy*0kha*5&(#d8vi52$z^%%ym=g2#w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'localhost:8080', '127.0.0.1:8000']
 
 
 # Application definition
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'simplicarbackend',
 ]
 
 MIDDLEWARE = [
@@ -46,18 +48,25 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+CSRFTOKEN_COOKIE_NAME = "csrftoken"
+
+CSRF_COOKIE_SECURE = True
+
+CSRF_COOKIE_HTTPONLY = False
+
+CSRF_COOKIE_SAMESITE = 'Strict'
 
 ROOT_URLCONF = 'simplicarsaa.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,8 +142,10 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",  # Add the address of your Vue.js development server
-    # Add other allowed origins if necessary
+    'http://localhost:8080',
+    'https://localhost:8080',
+    'http://127.0.0.1:8000',
+    'https://127.0.0.1:8000',
 ]
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -156,3 +167,4 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]
 
+X_FRAME_OPTIONS = 'DENY'
