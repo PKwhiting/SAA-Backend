@@ -45,24 +45,30 @@ INSTALLED_APPS = [
     'corsheaders',
     'simplicarbackend',
 ]
-
+CSRF_COOKIE_NAME = "csrftoken"
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8080',
+    'http://fddc-69-167-49-34.ngrok.io',
+    'http:///172.26.83.85:8080'
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
-CSRFTOKEN_COOKIE_NAME = "csrftoken"
 
-CSRF_COOKIE_SECURE = True
 
-CSRF_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_SECURE = True
 
-CSRF_COOKIE_SAMESITE = 'Strict'
+# CSRF_COOKIE_HTTPONLY = False
+
+# CSRF_COOKIE_SAMESITE = 'Strict'
 
 ROOT_URLCONF = 'simplicarsaa.urls'
 
