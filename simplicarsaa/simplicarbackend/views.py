@@ -12,12 +12,14 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import get_token
 from django.views.decorators.csrf import requires_csrf_token
+from rest_framework.decorators import api_view
+from .models import Car
+from .serializers import CarSerializer
 
 def index(request):
     return render(request, 'index.html')
 
 def get_csrf_token(request):
-    print("HERE BABY")
     response = JsonResponse({'csrfToken': get_token(request)})
     response.set_cookie('csrftoken', get_token(request), httponly=True, samesite='None', secure=True)
     return response
@@ -39,20 +41,15 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-def test(request):
-    print("HERE")
-    response = HttpResponse("Your response content")
-    # response['X-Frame-Options'] = 'DENY'  # Set the X-Frame-Options header
-    return response
+def ActiveVehicles(request):
+    cars = Car.objects.all()
+    serializer = CarSerializer(cars, many=True, context={'request': request})
+    return JsonResponse({'cars': serializer.data})
 
-
-  # You can use this decorator to disable CSRF protection for this view
-# make this view csrf_exempt
-# @csrf_protect
 @requires_csrf_token
+@api_view(['POST'])
 def login_or_register(request):
     csrf_token = get_token(request)  # Obtain the CSRF token
-    print(csrf_token)
     response = JsonResponse({'success': False, 'message': 'Invalid request'})
     response.set_cookie('csrftoken', csrf_token)  # Set the CSRF token in the response cookie
     response['X-Frame-Options'] = 'DENY'  # Set the X-Frame-Options header
@@ -65,9 +62,11 @@ def login_or_register(request):
         email = data.get('email')
         is_login = data.get('isLogin')
 
-        if is_login is not None and not is_login:  # Check for False
+        if is_login:  # User login
+            print("LOGIN")
             if User.objects.filter(username=username).exists():
                 user = authenticate(request, username=username, password=password)
+               
                 if user is not None:
                     login(request, user)
                     return JsonResponse({'success': True})
@@ -75,15 +74,15 @@ def login_or_register(request):
                     return JsonResponse({'success': False, 'message': 'Invalid username or password'})
             else:
                 return JsonResponse({'success': False, 'message': 'Username does not exist'})
-        else:
-            if User.objects.filter(username=username).exists():
-                return JsonResponse({'success': False, 'message': 'Username already exists'})
-            else:
+        else:  # User registration
+            if not User.objects.filter(username=username).exists():  # Check if username does not exist
                 try:
                     user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
                     user.save()
                     return JsonResponse({'success': True})
                 except Exception as e:
                     return JsonResponse({'success': False, 'message': str(e)})
+            else:
+                return JsonResponse({'success': False, 'message': 'Username already exists'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request'})
