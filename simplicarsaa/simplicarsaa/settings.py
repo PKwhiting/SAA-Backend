@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-u10z(0iblro1$#jd*oonyy*0kha*5&(#d8vi52$z^%%ym=g2#w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'localhost:8080', '127.0.0.1:8000']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'localhost:8080', '127.0.0.1:8000', 'saa-frontend-zzoy.onrender.com/']
 
 
 # Application definition
@@ -50,7 +50,8 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8080',
     'http://fddc-69-167-49-34.ngrok.io',
-    'http:///172.26.83.85:8080'
+    'http:///172.26.83.85:8080',
+    'https://saa-frontend-zzoy.onrender.com/',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -155,6 +156,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://localhost:8080',
     'http://127.0.0.1:8000',
     'https://127.0.0.1:8000',
+    'https://saa-frontend-zzoy.onrender.com/',
 ]
 CORS_ALLOW_HEADERS = [
     'accept',
