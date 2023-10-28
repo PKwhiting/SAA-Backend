@@ -14,12 +14,17 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 class CarSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
 
     class Meta:
         model = Car
-        fields = ['id', 'make', 'model', 'year', 'image_url']
+        fields = ['id', 'year', 'make', 'model', 'VIN','title_code', 'color', 'engine', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage', 'starting_bid', 'reserve_price', 'description', 'active', 'condition', 'vehicle_location', 'sale_date', 'last_updated', 'images']
 
-    def get_image_url(self, car):
+    def get_images(self, car):
         request = self.context.get('request')
-        return request.build_absolute_uri(car.image.url)
+        images = []
+        for i in range(1, 11):
+            image_field = getattr(car, f'image_{i}')
+            if image_field:
+                images.append(request.build_absolute_uri(image_field.url))
+        return images

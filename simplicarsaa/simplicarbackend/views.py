@@ -46,6 +46,15 @@ def ActiveVehicles(request):
     serializer = CarSerializer(cars, many=True, context={'request': request})
     return JsonResponse({'cars': serializer.data})
 
+
+# rewrite the car_detail view to get the id from the query parameter
+def car_detail(request):
+   car_id = request.GET.get('id')
+   car = Car.objects.get(pk=car_id)
+   serializer = CarSerializer(car, context={'request': request})
+   return JsonResponse({'car': serializer.data})
+
+
 @requires_csrf_token
 @api_view(['POST'])
 def login_or_register(request):

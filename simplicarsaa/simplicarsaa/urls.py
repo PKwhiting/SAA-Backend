@@ -21,6 +21,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('all_active_vehicles/', ActiveVehicles),
     path('login_or_register/', login_or_register),
+    path('single-car/', views.car_detail),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
