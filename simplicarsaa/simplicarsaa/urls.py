@@ -22,6 +22,7 @@ urlpatterns = [
     path('all_active_vehicles/', ActiveVehicles),
     path('login_or_register/', login_or_register),
     path('single-car/', views.car_detail),
+    path('update-bid/', views.update_current_bid),
     
 ]
 if settings.DEBUG:

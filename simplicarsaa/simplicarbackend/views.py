@@ -54,6 +54,16 @@ def car_detail(request):
    serializer = CarSerializer(car, context={'request': request})
    return JsonResponse({'car': serializer.data})
 
+@requires_csrf_token
+@api_view(['POST'])
+def update_current_bid(request):
+   car_id = request.GET.get('id')
+   car = Car.objects.get(pk=car_id)
+   car.current_bid = request.GET.get('current_bid')
+   car.save()
+   serializer = CarSerializer(car, context={'request': request})
+   return JsonResponse({'car': serializer.data})
+
 
 @requires_csrf_token
 @api_view(['POST'])
