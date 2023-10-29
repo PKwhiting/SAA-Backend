@@ -51,7 +51,9 @@ CSRF_TRUSTED_ORIGINS = [
     'http://fddc-69-167-49-34.ngrok.io',
     'http:///172.26.83.85:8080',
     'https://saa-frontend-zzoy.onrender.com',
+    'http://saa-frontend-zzoy.onrender.com',
     'https://www.simpli-cars.com',
+    'http://www.simpli-cars.com',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -157,8 +159,10 @@ CORS_ALLOWED_ORIGINS = [
     'https://localhost:8080',
     'http://127.0.0.1:8000',
     'https://127.0.0.1:8000',
-    'https://saa-frontend-zzoy.onrender.com'
+    'https://saa-frontend-zzoy.onrender.com',
+    'http://saa-frontend-zzoy.onrender.com',
     'https://www.simpli-cars.com',
+    'http://www.simpli-cars.com',
 ]
 CORS_ALLOW_HEADERS = [
     'accept',
