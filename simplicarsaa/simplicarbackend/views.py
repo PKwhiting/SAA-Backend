@@ -42,7 +42,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 def ActiveVehicles(request):
-    cars = Car.objects.all()
+    cars = Car.objects.filter(active=True)
     serializer = CarSerializer(cars, many=True, context={'request': request})
     return JsonResponse({'cars': serializer.data})
 
@@ -58,8 +58,8 @@ def car_detail(request):
 @api_view(['POST'])
 def update_current_bid(request):
    data = json.loads(request.body)
-   car_id = data.get('vehicle_id')
-   car = Car.objects.get(pk=car_id)
+   car_vin = data.get('vehicle_vin')
+   car = Car.objects.get(VIN=car_vin)
    print(car.current_bid)
    car.current_bid = data.get('bid')
    print(car.current_bid)
