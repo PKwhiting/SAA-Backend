@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-u10z(0iblro1$#jd*oonyy*0kha*5&(#d8vi52$z^%%ym=g2#w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'localhost:8080', '127.0.0.1:8000', 'saa-frontend-zzoy.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'localhost:8080', '127.0.0.1:8000', 'saa-frontend-zzoy.onrender.com', 'saa-backend.onrender.com']
 
 
 # Application definition
