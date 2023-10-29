@@ -18,7 +18,7 @@ class CarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Car
-        fields = ['id', 'year', 'make', 'model', 'VIN','title_code', 'color', 'engine', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage', 'starting_bid', 'reserve_price', 'description', 'active', 'condition', 'vehicle_location', 'sale_date', 'last_updated', 'images']
+        fields = ['id', 'year', 'make', 'model', 'VIN','title_code', 'color', 'engine', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage', 'starting_bid', 'current_bid', 'reserve_price', 'description', 'active', 'condition', 'vehicle_location', 'sale_date', 'last_updated', 'images']
 
     def get_images(self, car):
         request = self.context.get('request')
