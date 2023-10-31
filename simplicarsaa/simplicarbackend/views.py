@@ -14,6 +14,7 @@ from django.views.decorators.csrf import get_token
 from django.views.decorators.csrf import requires_csrf_token
 from rest_framework.decorators import api_view
 from .models import Car
+from .models import Bid
 from .serializers import CarSerializer
 
 def index(request):
@@ -58,12 +59,12 @@ def car_detail(request):
 @api_view(['POST'])
 def update_current_bid(request):
    data = json.loads(request.body)
-   car_vin = data.get('vehicle_vin')
-   car = Car.objects.get(VIN=car_vin)
-   print(car.current_bid)
+   userID = data.get('userID')
+   car = Car.objects.get(VIN=data.get('vehicle_vin'))
+   user = User.objects.get(pk=userID)
+   bid = Bid.objects.create(bid_amount=data.get('bid'), bidder=user, bid_vehicle=car)
+   bid.save()
    car.current_bid = data.get('bid')
-   print(car.current_bid)
-   car.save()
    serializer = CarSerializer(car, context={'request': request})
    return JsonResponse({'car': serializer.data})
 
@@ -85,13 +86,12 @@ def login_or_register(request):
         is_login = data.get('isLogin')
 
         if is_login:  # User login
-            print("LOGIN")
             if User.objects.filter(username=username).exists():
                 user = authenticate(request, username=username, password=password)
                
                 if user is not None:
                     login(request, user)
-                    return JsonResponse({'success': True})
+                    return JsonResponse({'success': True, 'userID': user.id})
                 else:
                     return JsonResponse({'success': False, 'message': 'Invalid username or password'})
             else:
@@ -101,7 +101,7 @@ def login_or_register(request):
                 try:
                     user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
                     user.save()
-                    return JsonResponse({'success': True})
+                    return JsonResponse({'success': True, 'userID': user.id})
                 except Exception as e:
                     return JsonResponse({'success': False, 'message': str(e)})
             else:
