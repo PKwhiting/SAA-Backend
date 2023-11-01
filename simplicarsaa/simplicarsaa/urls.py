@@ -7,6 +7,7 @@ from simplicarbackend.views import login_or_register
 from simplicarbackend.views import ActiveVehicles
 from django.conf import settings
 from django.conf.urls.static import static
+from simplicarbackend.consumers import BiddingConsumer
 
 
 
@@ -23,6 +24,7 @@ urlpatterns = [
     path('login_or_register/', login_or_register),
     path('single-car/', views.car_detail),
     path('update-bid/', views.update_current_bid),
+    path('bidding/', BiddingConsumer.as_asgi()),
     
 ]
 if settings.DEBUG:

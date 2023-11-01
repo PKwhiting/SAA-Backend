@@ -1,16 +1,14 @@
-"""
-ASGI config for simplicarsaa project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
-"""
-
 import os
 
+from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
+from simplicarbackend.consumers import BiddingConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'simplicarsaa.settings')
 
-application = get_asgi_application()
+# Application for handling HTTP and WebSocket requests
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),  # Your Django application
+    "websocket": BiddingConsumer.as_asgi(),  # Your WebSocket consumer
+})
+
