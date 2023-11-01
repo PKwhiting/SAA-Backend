@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne',
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
     'simplicarbackend',
+    'channels',
 ]
 CSRF_COOKIE_NAME = "csrftoken"
 CORS_ALLOW_CREDENTIALS = True
@@ -185,3 +187,9 @@ CORS_ALLOW_METHODS = [
 ]
 
 X_FRAME_OPTIONS = 'DENY'
+ASGI_APPLICATION = 'simplicarsaa.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

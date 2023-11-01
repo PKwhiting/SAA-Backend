@@ -16,6 +16,9 @@ from rest_framework.decorators import api_view
 from .models import Car
 from .models import Bid
 from .serializers import CarSerializer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.conf import settings
 
 def index(request):
     return render(request, 'index.html')
