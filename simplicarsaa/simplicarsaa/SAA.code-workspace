@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "../.."
+			"path": "../../../../SAA-Frontend"
 		},
 		{
-			"path": "../../../../SAA-Frontend"
+			"path": "../.."
 		}
 	],
 	"settings": {
