@@ -50,6 +50,43 @@ class Car(models.Model):
     image_9 = models.ImageField(upload_to='cars', blank=True)
     image_10 = models.ImageField(upload_to='cars', blank=True)
 
+    # undamages/usable parts
+    vehicle_starts = models.BooleanField(default=False)
+    vehicle_drives = models.BooleanField(default=False)
+    bumper_damage = models.BooleanField(default=False)
+    driver_headlight_damage = models.BooleanField(default=False)
+    passenger_headlight_damage = models.BooleanField(default=False)
+    hood_damage = models.BooleanField(default=False)
+    roof_damage = models.BooleanField(default=False)
+    driver_fender_damage = models.BooleanField(default=False)
+    passenger_fender_damage = models.BooleanField(default=False)
+    driver_door_damage = models.BooleanField(default=False)
+    passenger_door_damage = models.BooleanField(default=False)
+    driver_rear_door_damage = models.BooleanField(default=False)
+    passenger_rear_door_damage = models.BooleanField(default=False)
+    driver_rocker_damage = models.BooleanField(default=False)
+    passenger_rocker_damage = models.BooleanField(default=False)
+    driver_rear_wheel_arch_damage = models.BooleanField(default=False)
+    passenger_rear_wheel_arch_damage = models.BooleanField(default=False)
+    driver_rear_quarter_damage = models.BooleanField(default=False)
+    passenger_rear_quarter_damage = models.BooleanField(default=False)
+    trunk_damage = models.BooleanField(default=False)
+    rear_bumper_damage = models.BooleanField(default=False)
+    driver_tail_light_damage = models.BooleanField(default=False)
+    passenger_tail_light_damage = models.BooleanField(default=False)
+    driver_mirror_damage = models.BooleanField(default=False)
+    passenger_mirror_damage = models.BooleanField(default=False)
+    windshield_damage = models.BooleanField(default=False)
+    driver_window_damage = models.BooleanField(default=False)
+    passenger_window_damage = models.BooleanField(default=False)
+    driver_rear_window_damage = models.BooleanField(default=False)
+    passenger_rear_window_damage = models.BooleanField(default=False)
+    back_glass_damage = models.BooleanField(default=False)
+    truck_bed_damage = models.BooleanField(default=False)
+
+
+
+
     def get_bids(self):
         return Bid.objects.filter(bid_vehicle=self)
     
