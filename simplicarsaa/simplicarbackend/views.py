@@ -1,5 +1,11 @@
 import json
+import datetime
+import base64
+import os
+from django.core.files.base import ContentFile
 from django.shortcuts import render
+from django.shortcuts import render
+from django.http import HttpResponseBadRequest, JsonResponse
 
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
@@ -111,3 +117,67 @@ def login_or_register(request):
                 return JsonResponse({'success': False, 'message': 'Username already exists'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request'})
+
+@requires_csrf_token
+@api_view(['POST'])
+def add_vehicle(request):
+    if request.method == 'POST':
+        year = request.data.get('year')
+        make = request.data.get('make')
+        model = request.data.get('model')
+        VIN =request.data.get('vin')
+        title_code = request.data.get('titleStatus')
+        color = request.data.get('color')
+        engine = request.data.get('engineType')
+        engine_displacement = request.data.get('displacement')
+        cylinders = request.data.get('cylinders')
+        transmission = request.data.get('transmission')
+        drive_type = request.data.get('drive')
+        vehicle_type = request.data.get('vehicleType')
+        fuel_type = request.data.get('fuel')
+        keys = request.data.get('numKeys')
+        mileage = request.data.get('odometer')
+        starting_bid = 0
+        current_bid = 0
+        reserve_price = float(request.data.get('reservePrice', 0)) if request.data.get('reservePrice', '') != '' else 0
+        description = request.data.get('description')
+        active = False
+        condition = 'Good'
+        vehicle_location = request.data.get('location')
+        saleDate = (datetime.date.today() + datetime.timedelta((5 - datetime.date.today().weekday()) % 7)).strftime('%Y-%m-%d') + 'T12:00:00Z'
+        user = User.objects.get(pk=request.data.get('userID'))
+
+        car = Car(
+            year=year,
+            make=make,
+            model=model,
+            VIN=VIN,
+            title_code=title_code,
+            color=color,
+            engine=engine,
+            engine_displacement=engine_displacement,
+            cylinders=cylinders,
+            transmission=transmission,
+            drive_type=drive_type,
+            vehicle_type=vehicle_type,
+            fuel_type=fuel_type,
+            keys=keys,
+            mileage=mileage,
+            starting_bid=starting_bid,
+            current_bid=current_bid,
+            reserve_price=reserve_price,
+            description=description,
+            active=active,
+            condition=condition,
+            vehicle_location=vehicle_location,
+            sale_date=saleDate,
+            creator=user
+        )
+        images = request.FILES.getlist('images')
+        i = 0
+        for i, image in enumerate(images):
+            setattr(car, f"image_{i+1}", image)
+        car.save()
+        return JsonResponse({'success': True})
+    else:
+        return HttpResponseBadRequest('Invalid request method')

@@ -14,6 +14,7 @@ class Bid(models.Model):
         return f'Bid {self.id} on {self.bid_vehicle}'
     
 class Car(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     year = models.IntegerField()
     make = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -21,17 +22,18 @@ class Car(models.Model):
     title_code = models.CharField(max_length=100, blank=True)
     color = models.CharField(max_length=100)
     engine = models.CharField(max_length=100, blank=True)
+    engine_displacement = models.FloatField(blank=True, null=True)
     cylinders = models.IntegerField(blank=True)
     transmission = models.CharField(max_length=100, blank=True)
     drive_type = models.CharField(max_length=100, blank=True)
     vehicle_type = models.CharField(max_length=100, blank=True)
     fuel_type = models.CharField(max_length=100, blank=True)
-    keys = models.IntegerField(blank=True)
+    keys = models.IntegerField(blank=True, null=True)
     mileage = models.IntegerField()
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)
     current_bid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, default=0.0)
     reserve_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-    description = models.TextField(max_length=1000, blank=True)
+    description = models.TextField(max_length=1000, blank=True, null=True)
     active = models.BooleanField(default=True)
     condition = models.CharField(max_length=100, blank=True)
     vehicle_location = models.TextField()
