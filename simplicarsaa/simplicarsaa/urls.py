@@ -25,6 +25,7 @@ urlpatterns = [
     path('single-car/', views.car_detail),
     path('update-bid/', views.update_current_bid),
     path('bidding/', BiddingConsumer.as_asgi()),
+    path('list-vehicle/', views.add_vehicle),
     
 ]
 if settings.DEBUG:
