@@ -2,6 +2,7 @@ import json
 import datetime
 import base64
 import os
+
 from django.core.files.base import ContentFile
 from django.shortcuts import render
 from django.shortcuts import render
@@ -25,6 +26,7 @@ from .serializers import CarSerializer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.conf import settings
+from datetime import date, timedelta
 
 def index(request):
     return render(request, 'index.html')
@@ -122,30 +124,63 @@ def login_or_register(request):
 @api_view(['POST'])
 def add_vehicle(request):
     if request.method == 'POST':
-        year = request.data.get('year')
-        make = request.data.get('make')
-        model = request.data.get('model')
-        VIN =request.data.get('vin')
-        title_code = request.data.get('titleStatus')
-        color = request.data.get('color')
-        engine = request.data.get('engineType')
-        engine_displacement = request.data.get('displacement')
-        cylinders = request.data.get('cylinders')
-        transmission = request.data.get('transmission')
-        drive_type = request.data.get('drive')
-        vehicle_type = request.data.get('vehicleType')
-        fuel_type = request.data.get('fuel')
-        keys = request.data.get('numKeys')
-        mileage = request.data.get('odometer')
+        year = request.POST.get('year')
+        make = request.POST.get('make')
+        model = request.POST.get('model')
+        VIN = request.POST.get('vin')
+        title_code = request.POST.get('titleStatus')
+        color = request.POST.get('color')
+        engine = request.POST.get('engineType')
+        engine_displacement = 0 if request.POST.get('displacement') == '' else request.POST.get('displacement')
+        cylinders = 0 if request.POST.get('cylinders') == '' else request.POST.get('cylinders')
+        transmission = request.POST.get('transmission')
+        drive_type = request.POST.get('drive')
+        vehicle_type = request.POST.get('vehicleType')
+        fuel_type = request.POST.get('fuel')
+        keys = request.POST.get('numKeys')
+        mileage = request.POST.get('odometer')
         starting_bid = 0
         current_bid = 0
-        reserve_price = float(request.data.get('reservePrice', 0)) if request.data.get('reservePrice', '') != '' else 0
-        description = request.data.get('description')
+        reserve_price = float(request.POST.get('reservePrice', 0)) if request.POST.get('reservePrice', '') != '' else 0
+        description = request.POST.get('description')
         active = False
         condition = 'Good'
-        vehicle_location = request.data.get('location')
-        saleDate = (datetime.date.today() + datetime.timedelta((5 - datetime.date.today().weekday()) % 7)).strftime('%Y-%m-%d') + 'T12:00:00Z'
-        user = User.objects.get(pk=request.data.get('userID'))
+        vehicle_location = request.POST.get('location')
+        sale_date = (date.today() + timedelta((5 - date.today().weekday()) % 7)).strftime('%Y-%m-%d') + 'T12:00:00Z'
+        user = User.objects.get(pk=request.POST.get('userID'))
+        vehicle_starts=json.loads(request.POST.get('vehicleRuns', False))
+        vehicle_drives=json.loads(request.POST.get('vehicleDrives', False))
+        bumper_damage=json.loads(request.POST.get('bumper_damage', False))
+        driver_headlight_damage=json.loads(request.POST.get('driver_headlight_damage', False))
+        passenger_headlight_damage=json.loads(request.POST.get('passenger_headlight_damage', False))
+        hood_damage=json.loads(request.POST.get('hood_damage', False))
+        roof_damage=json.loads(request.POST.get('roof_damage', False))
+        driver_fender_damage=json.loads(request.POST.get('driver_fender_damage', False))
+        passenger_fender_damage=json.loads(request.POST.get('passenger_fender_damage', False))
+        driver_door_damage=json.loads(request.POST.get('driver_door_damage', False))
+        passenger_door_damage=json.loads(request.POST.get('passenger_door_damage', False))
+        driver_rear_door_damage=json.loads(request.POST.get('driver_rear_door_damage', False))
+        passenger_rear_door_damage=json.loads(request.POST.get('passenger_rear_door_damage', False))
+        driver_rocker_damage=json.loads(request.POST.get('driver_rocker_damage', False))
+        passenger_rocker_damage=json.loads(request.POST.get('passenger_rocker_damage', False))
+        driver_rear_wheel_arch_damage=json.loads(request.POST.get('driver_rear_wheel_arch_damage', False))
+        passenger_rear_wheel_arch_damage=json.loads(request.POST.get('passenger_rear_wheel_arch_damage', False))
+        driver_rear_quarter_damage=json.loads(request.POST.get('driver_rear_quarter_damage', False))
+        passenger_rear_quarter_damage=json.loads(request.POST.get('passenger_rear_quarter_damage', False))
+        trunk_damage=json.loads(request.POST.get('trunk_damage', False))
+        rear_bumper_damage=json.loads(request.POST.get('rear_bumper_damage', False))
+        driver_tail_light_damage=json.loads(request.POST.get('driver_tail_light_damage', False))
+        passenger_tail_light_damage=json.loads(request.POST.get('passenger_tail_light_damage', False))
+        driver_mirror_damage=json.loads(request.POST.get('driver_mirror_damage', False))
+        passenger_mirror_damage=json.loads(request.POST.get('passenger_mirror_damage', False))
+        windshield_damage=json.loads(request.POST.get('windshield_damage', False))
+        driver_window_damage=json.loads(request.POST.get('driver_window_damage', False))
+        passenger_window_damage=json.loads(request.POST.get('passenger_window_damage', False))
+        driver_rear_window_damage=json.loads(request.POST.get('driver_rear_window_damage', False))
+        passenger_rear_window_damage=json.loads(request.POST.get('passenger_rear_window_damage', False))
+        back_glass_damage=json.loads(request.POST.get('back_glass_damage', False))
+        truck_bed_damage=json.loads(request.POST.get('truck_bed_damage', False))
+
 
         car = Car(
             year=year,
@@ -170,13 +205,46 @@ def add_vehicle(request):
             active=active,
             condition=condition,
             vehicle_location=vehicle_location,
-            sale_date=saleDate,
-            creator=user
+            sale_date=sale_date,
+            creator=user,
+            vehicle_starts=vehicle_starts,
+            vehicle_drives=vehicle_drives,
+            bumper_damage=bumper_damage,
+            driver_headlight_damage=driver_headlight_damage,
+            passenger_headlight_damage=passenger_headlight_damage,
+            hood_damage=hood_damage,
+            roof_damage=roof_damage,
+            driver_fender_damage=driver_fender_damage,
+            passenger_fender_damage=passenger_fender_damage,
+            driver_door_damage=driver_door_damage,
+            passenger_door_damage=passenger_door_damage,
+            driver_rear_door_damage=driver_rear_door_damage,
+            passenger_rear_door_damage=passenger_rear_door_damage,
+            driver_rocker_damage=driver_rocker_damage,
+            passenger_rocker_damage=passenger_rocker_damage,
+            driver_rear_wheel_arch_damage=driver_rear_wheel_arch_damage,
+            passenger_rear_wheel_arch_damage=passenger_rear_wheel_arch_damage,
+            driver_rear_quarter_damage=driver_rear_quarter_damage,
+            passenger_rear_quarter_damage=passenger_rear_quarter_damage,
+            trunk_damage=trunk_damage,
+            rear_bumper_damage=rear_bumper_damage,
+            driver_tail_light_damage=driver_tail_light_damage,
+            passenger_tail_light_damage=passenger_tail_light_damage,
+            driver_mirror_damage=driver_mirror_damage,
+            passenger_mirror_damage=passenger_mirror_damage,
+            windshield_damage=windshield_damage,
+            driver_window_damage=driver_window_damage,
+            passenger_window_damage=passenger_window_damage,
+            driver_rear_window_damage=driver_rear_window_damage,
+            passenger_rear_window_damage=passenger_rear_window_damage,
+            back_glass_damage=back_glass_damage,
+            truck_bed_damage=truck_bed_damage
         )
+
         images = request.FILES.getlist('images')
-        i = 0
         for i, image in enumerate(images):
             setattr(car, f"image_{i+1}", image)
+
         car.save()
         return JsonResponse({'success': True})
     else:
