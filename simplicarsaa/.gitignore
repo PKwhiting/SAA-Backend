@@ -1,0 +1,24 @@
+# Ignore compiled Python files
+*.pyc
+*.sqlite3
+.DS_Store
+# Ignore the virtual environment directory
+venv/
+
+# Ignore the Django settings file
+myproject/settings.py
+
+# Ignore the local development settings file
+myproject/settings_local.py
+
+# Ignore the database file
+db.sqlite3
+
+# Ignore the media files directory
+media/
+
+# Ignore the static files directory
+staticfiles/
+
+# Ignore the log files directory
+logs/
