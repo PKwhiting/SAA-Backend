@@ -22,6 +22,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from rest_framework.decorators import api_view
 from .models import Car
 from .models import Bid
+from .models import SavedVehicles
 from .serializers import CarSerializer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -57,6 +58,38 @@ def ActiveVehicles(request):
     cars = Car.objects.filter(active=True)
     serializer = CarSerializer(cars, many=True, context={'request': request})
     return JsonResponse({'cars': serializer.data})
+
+def saved_vehicles(request, user_id):
+    user = User.objects.get(pk=user_id)
+    saved_cars = SavedVehicles.objects.filter(user=user).select_related('saved_vehicle')
+    cars = [saved_vehicle.saved_vehicle for saved_vehicle in saved_cars]
+    serializer = CarSerializer(cars, many=True, context={'request': request})
+    return JsonResponse({'saved_cars': serializer.data})
+    
+@requires_csrf_token
+@api_view(['POST'])
+def add_saved_vehicle(request, user_id):
+    data = json.loads(request.body)
+    user = User.objects.get(pk=user_id)
+    car = Car.objects.get(VIN=data.get('vehicle_vin'))
+    saved_vehicle, created = SavedVehicles.objects.get_or_create(user=user, saved_vehicle=car)
+    if created:
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'message': 'Vehicle already saved'})
+    
+@requires_csrf_token
+@api_view(['POST'])
+def remove_saved_vehicle(request, user_id):
+    data = json.loads(request.body)
+    user = User.objects.get(pk=user_id)
+    car = Car.objects.get(VIN=data.get('vehicle_vin'))
+    saved_vehicle = SavedVehicles.objects.filter(user=user, saved_vehicle=car).first()
+    if saved_vehicle:
+        saved_vehicle.delete()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'message': 'Vehicle not found'})
 
 
 # rewrite the car_detail view to get the id from the query parameter

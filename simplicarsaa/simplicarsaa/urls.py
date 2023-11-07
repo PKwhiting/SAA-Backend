@@ -5,6 +5,9 @@ from rest_framework import routers
 from simplicarbackend import views
 from simplicarbackend.views import login_or_register
 from simplicarbackend.views import ActiveVehicles
+from simplicarbackend.views import saved_vehicles
+from simplicarbackend.views import add_saved_vehicle
+from simplicarbackend.views import remove_saved_vehicle
 from django.conf import settings
 from django.conf.urls.static import static
 from simplicarbackend.consumers import BiddingConsumer
@@ -26,6 +29,10 @@ urlpatterns = [
     path('update-bid/', views.update_current_bid),
     path('bidding/', BiddingConsumer.as_asgi()),
     path('list-vehicle/', views.add_vehicle),
+    path('saved-vehicles/<int:user_id>', saved_vehicles),  
+    path('add-saved-vehicle/<int:user_id>', add_saved_vehicle),
+    path('remove-saved-vehicle/<int:user_id>', remove_saved_vehicle)
+
     
 ]
 if settings.DEBUG:
