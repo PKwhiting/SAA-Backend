@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'simplicarbackend',
     'channels',
+    'django_extensions',
 ]
 CSRF_COOKIE_NAME = "csrftoken"
 CORS_ALLOW_CREDENTIALS = True
