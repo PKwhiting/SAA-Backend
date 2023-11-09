@@ -2,7 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db import models
 
+AUCTION_CHOICES = [
+        ('SAA', 'SAA'),
+        ('COPART', 'COPART'),
+        ('IAA', 'IAA'),
+    ]
+
 class Car(models.Model):
+    auction = models.CharField(max_length=100, choices=AUCTION_CHOICES, default='SAA')
+    vehicle_auction_link = models.CharField(max_length=100, blank=True, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     year = models.IntegerField()
     make = models.CharField(max_length=100)
@@ -11,7 +19,7 @@ class Car(models.Model):
     title_code = models.CharField(max_length=100, blank=True)
     color = models.CharField(max_length=100)
     engine = models.CharField(max_length=100, blank=True)
-    engine_displacement = models.FloatField(blank=True, null=True)
+    engine_displacement = models.CharField(max_length=100, blank=True, default=0.0)
     cylinders = models.IntegerField(blank=True)
     transmission = models.CharField(max_length=100, blank=True)
     drive_type = models.CharField(max_length=100, blank=True)
@@ -38,6 +46,16 @@ class Car(models.Model):
     image_8 = models.ImageField(upload_to='cars', blank=True)
     image_9 = models.ImageField(upload_to='cars', blank=True)
     image_10 = models.ImageField(upload_to='cars', blank=True)
+    image_1_url = models.URLField(blank=True, null=True)
+    image_2_url = models.URLField(blank=True, null=True)
+    image_3_url = models.URLField(blank=True, null=True)
+    image_4_url = models.URLField(blank=True, null=True)
+    image_5_url = models.URLField(blank=True, null=True)
+    image_6_url = models.URLField(blank=True, null=True)
+    image_7_url = models.URLField(blank=True, null=True)
+    image_8_url = models.URLField(blank=True, null=True)
+    image_9_url = models.URLField(blank=True, null=True)
+    image_10_url = models.URLField(blank=True, null=True)
 
     # undamages/usable parts
     vehicle_starts = models.BooleanField(default=False)
@@ -72,3 +90,6 @@ class Car(models.Model):
     passenger_rear_window_damage = models.BooleanField(default=False)
     back_glass_damage = models.BooleanField(default=False)
     truck_bed_damage = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.year} {self.make} {self.model} - {self.VIN}'

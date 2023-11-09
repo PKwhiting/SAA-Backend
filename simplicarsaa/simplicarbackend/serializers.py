@@ -21,7 +21,7 @@ class CarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Car
-        fields = ['id', 'year', 'make', 'model', 'VIN', 'title_code', 'color', 'engine', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage',
+        fields = ['id', 'auction', 'vehicle_auction_link', 'year', 'make', 'model', 'VIN', 'title_code', 'color', 'engine', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage',
                   'starting_bid', 'current_bid', 'reserve_price', 'description', 'active', 'condition', 'vehicle_location', 'sale_date', 'last_updated', 'images', 'highest_bid',
                   'vehicle_starts', 'vehicle_drives', 'bumper_damage', 'driver_headlight_damage', 'passenger_headlight_damage', 'hood_damage', 'roof_damage',
                   'driver_fender_damage', 'passenger_fender_damage', 'driver_door_damage', 'passenger_door_damage', 'driver_rear_door_damage', 'passenger_rear_door_damage',
@@ -35,8 +35,11 @@ class CarSerializer(serializers.ModelSerializer):
         images = []
         for i in range(1, 11):
             image_field = getattr(car, f'image_{i}')
+            image_field_url = getattr(car, f'image_{i}_url')
             if image_field:
                 images.append(request.build_absolute_uri(image_field.url))
+            elif image_field_url:
+                images.append(image_field_url)
         return images
 
     def get_highest_bid(self, car):

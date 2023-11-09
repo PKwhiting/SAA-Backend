@@ -15,9 +15,6 @@ class Bid(models.Model):
 
     def get_bids(self):
         return Bid.objects.filter(bid_vehicle=self)
-    
-    def __str__(self):
-        return f'{self.year} {self.make} {self.model} - {self.VIN}'
 
 class SavedVehicles(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

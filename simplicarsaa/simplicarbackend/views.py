@@ -71,7 +71,7 @@ def saved_vehicles(request, user_id):
 def add_saved_vehicle(request, user_id):
     data = json.loads(request.body)
     user = User.objects.get(pk=user_id)
-    car = Car.objects.get(VIN=data.get('vehicle_vin'))
+    car = Car.objects.get(id=data.get('carID'))
     saved_vehicle, created = SavedVehicles.objects.get_or_create(user=user, saved_vehicle=car)
     if created:
         return JsonResponse({'success': True})
@@ -83,7 +83,7 @@ def add_saved_vehicle(request, user_id):
 def remove_saved_vehicle(request, user_id):
     data = json.loads(request.body)
     user = User.objects.get(pk=user_id)
-    car = Car.objects.get(VIN=data.get('vehicle_vin'))
+    car = Car.objects.get(id=data.get('carID'))
     saved_vehicle = SavedVehicles.objects.filter(user=user, saved_vehicle=car).first()
     if saved_vehicle:
         saved_vehicle.delete()
@@ -135,7 +135,7 @@ def login_or_register(request):
                
                 if user is not None:
                     login(request, user)
-                    return JsonResponse({'success': True, 'userID': user.id})
+                    return JsonResponse({'success': True, 'userID': user.id, 'isStaff': user.is_staff})
                 else:
                     return JsonResponse({'success': False, 'message': 'Invalid username or password'})
             else:
