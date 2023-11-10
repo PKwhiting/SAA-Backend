@@ -12,3 +12,8 @@ application = ProtocolTypeRouter({
     "websocket": BiddingConsumer.as_asgi(),  # Your WebSocket consumer
 })
 
+
+
+
+
+

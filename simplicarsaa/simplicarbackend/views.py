@@ -28,6 +28,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.conf import settings
 from datetime import date, timedelta
+from django.core.paginator import Paginator
 
 def index(request):
     return render(request, 'index.html')
@@ -54,10 +55,47 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+@requires_csrf_token
+@api_view(['POST'])
 def ActiveVehicles(request):
     cars = Car.objects.filter(active=True)
-    serializer = CarSerializer(cars, many=True, context={'request': request})
-    return JsonResponse({'cars': serializer.data})
+    data = json.loads(request.body)
+    make = data.get('makes')
+    model = data.get('models')
+    yearsStart = data['years'].get('start')
+    sold = data.get('sold')
+    yearsEnd = data['years'].get('end')
+    if make:
+        cars = cars.filter(make__icontains=make)
+    if model:
+        cars = cars.filter(model__icontains=model)
+    if yearsStart and yearsEnd:
+        start_year, end_year = int(yearsStart), int(yearsEnd)
+        cars = cars.filter(year__gte=start_year, year__lte=end_year)
+    elif yearsStart:
+        start_year = int(yearsStart)
+        cars = cars.filter(year__gte=start_year)
+    elif yearsEnd:
+        end_year = int(yearsEnd)
+        cars = cars.filter(year__lte=end_year)
+
+    today = date.today()
+    if sold:
+        cars = cars.filter(sale_date__lte=today)
+    else:
+        cars = cars.filter(sale_date__gte=today)
+    
+    
+    paginator = Paginator(cars, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    serializer = CarSerializer(page_obj, many=True, context={'request': request})
+    return JsonResponse({
+        'cars': serializer.data,
+        'num_pages': paginator.num_pages,
+    })
+
+
 
 def saved_vehicles(request, user_id):
     user = User.objects.get(pk=user_id)
