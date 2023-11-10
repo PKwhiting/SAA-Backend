@@ -24,6 +24,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('all_active_vehicles/', ActiveVehicles),
+    path('all_active_vehicles/page<int:page>/', ActiveVehicles),
     path('login_or_register/', login_or_register),
     path('single-car/', views.car_detail),
     path('update-bid/', views.update_current_bid),
