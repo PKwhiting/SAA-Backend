@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'simplicarsaa.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': './mnt/disk1/db.sqlite3',
     }
 }
 
