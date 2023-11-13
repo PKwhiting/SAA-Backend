@@ -18,6 +18,8 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 
+
+#url patterns
 urlpatterns = [
     path('get_csrf_token/', views.get_csrf_token, name='get_csrf_token'),
     path('admin/', admin.site.urls),
