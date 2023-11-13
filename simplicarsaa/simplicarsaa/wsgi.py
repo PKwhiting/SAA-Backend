@@ -12,5 +12,7 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'simplicarsaa.settings')
+import sys
+sys.path.append('/opt/render/project/src/simplicarsaa/')
 
 application = get_wsgi_application()
