@@ -96,7 +96,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'simplicarsaa.wsgi.application'
 
-
+#test
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
