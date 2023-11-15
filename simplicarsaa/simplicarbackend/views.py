@@ -22,7 +22,8 @@ from django.views.decorators.csrf import requires_csrf_token
 from rest_framework.decorators import api_view
 from .models import Car
 from .models import Bid
-from .models import SavedVehicles
+from .models import SavedVehicle
+from .models import VehicleFilter
 from .serializers import CarSerializer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -320,3 +321,35 @@ def add_vehicle(request):
         return JsonResponse({'success': True})
     else:
         return HttpResponseBadRequest('Invalid request method')
+    
+@requires_csrf_token
+@api_view(['POST'])
+def save_filter(request, user_id):
+    data = json.loads(request.body)
+    user = User.objects.get(pk=user_id)
+    make = data['filters'].get('make')
+    model = data['filters'].get('model')
+    start_year = data['filters']['year'].get('start')
+    end_year = data['filters']['year'].get('end')
+    filter_name = data.get('name')
+
+    filter, created = VehicleFilter.objects.get_or_create(user=user, make=make, model=model, start_year=start_year, end_year=end_year, filter_name=filter_name)
+    if created:
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'message': 'Filter already exists'})
+
+def get_filters(request, user_id):
+    user = User.objects.get(pk=user_id)
+    filters = VehicleFilter.objects.filter(user=user)
+    data = []
+    for filter in filters:
+        data.append({
+            'id': filter.id,
+            'make': filter.make,
+            'model': filter.model,
+            'start': filter.start_year,
+            'end': filter.end_year,
+            'name': filter.filter_name,
+        })
+    return JsonResponse({'filters': data})

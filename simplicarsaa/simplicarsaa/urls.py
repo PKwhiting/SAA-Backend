@@ -34,7 +34,9 @@ urlpatterns = [
     path('list-vehicle/', views.add_vehicle),
     path('saved-vehicles/<int:user_id>', saved_vehicles),  
     path('add-saved-vehicle/<int:user_id>', add_saved_vehicle),
-    path('remove-saved-vehicle/<int:user_id>', remove_saved_vehicle)
+    path('remove-saved-vehicle/<int:user_id>', remove_saved_vehicle),
+    path('save-filter/<int:user_id>', views.save_filter),
+    path('get-saved-filters/<int:user_id>', views.get_filters),
 
     
 ]
