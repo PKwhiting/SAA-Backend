@@ -4,6 +4,8 @@
 *.sqlite3
 *.sqlite3
 .DS_Store
+.env
+*.env
 # Ignore the virtual environment directory
 venv/
 
