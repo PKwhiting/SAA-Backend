@@ -30,6 +30,7 @@ from asgiref.sync import async_to_sync
 from django.conf import settings
 from datetime import date, timedelta
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
 
 def index(request):
     return render(request, 'index.html')
@@ -353,3 +354,23 @@ def get_filters(request, user_id):
             'name': filter.filter_name,
         })
     return JsonResponse({'filters': data})
+
+@requires_csrf_token
+@api_view(['POST'])
+def declare_winner(request):
+    data = json.loads(request.body)
+    car = Car.objects.get(pk=data.get('carID'))
+    bids = Bid.objects.filter(bid_vehicle=car)
+    highest_bid = bids.order_by('-bid_amount').first()
+    user = User.objects.get(pk=highest_bid.bidder.id)
+
+    if user:
+        send_mail(
+            'Congratulations from the SimpliCars Team!',
+            f'Howdy {user.first_name},\n\nCongratulations on winning your {car.make} {car.model} with VIN {car.VIN}! Please contact us to arrange payment and pickup of the vehicle.\n\nBest regards,\nThe Auction Team',
+            os.environ.get('GMAIL_EMAIL'),
+            [user.email]
+        )
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'message': 'User not found'})

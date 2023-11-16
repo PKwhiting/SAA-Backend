@@ -8,6 +8,7 @@ from simplicarbackend.views import ActiveVehicles
 from simplicarbackend.views import saved_vehicles
 from simplicarbackend.views import add_saved_vehicle
 from simplicarbackend.views import remove_saved_vehicle
+from simplicarbackend.views import get_filters
 from django.conf import settings
 from django.conf.urls.static import static
 from simplicarbackend.consumers import BiddingConsumer
@@ -37,6 +38,8 @@ urlpatterns = [
     path('remove-saved-vehicle/<int:user_id>', remove_saved_vehicle),
     path('save-filter/<int:user_id>', views.save_filter),
     path('get-saved-filters/<int:user_id>', views.get_filters),
+    # path('delete-filter/<int:user_id>/<int:filter_id>', views.get_filters),
+    path('declare-winner/', views.declare_winner),
 
     
 ]
