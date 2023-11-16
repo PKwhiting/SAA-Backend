@@ -362,7 +362,8 @@ def declare_winner(request):
     car = Car.objects.get(pk=data.get('carID'))
     bids = Bid.objects.filter(bid_vehicle=car)
     highest_bid = bids.order_by('-bid_amount').first()
-    user = User.objects.get(pk=highest_bid.bidder.id)
+    if highest_bid:
+        user = User.objects.get(pk=highest_bid.bidder.id)
 
     if user:
         send_mail(
