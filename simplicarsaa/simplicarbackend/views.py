@@ -101,7 +101,7 @@ def ActiveVehicles(request):
 
 def saved_vehicles(request, user_id):
     user = User.objects.get(pk=user_id)
-    saved_cars = SavedVehicles.objects.filter(user=user).select_related('saved_vehicle')
+    saved_cars = SavedVehicle.objects.filter(user=user).select_related('saved_vehicle')
     cars = [saved_vehicle.saved_vehicle for saved_vehicle in saved_cars]
     serializer = CarSerializer(cars, many=True, context={'request': request})
     return JsonResponse({'saved_cars': serializer.data})
@@ -112,7 +112,7 @@ def add_saved_vehicle(request, user_id):
     data = json.loads(request.body)
     user = User.objects.get(pk=user_id)
     car = Car.objects.get(id=data.get('carID'))
-    saved_vehicle, created = SavedVehicles.objects.get_or_create(user=user, saved_vehicle=car)
+    saved_vehicle, created = SavedVehicle.objects.get_or_create(user=user, saved_vehicle=car)
     if created:
         return JsonResponse({'success': True})
     else:
@@ -124,7 +124,7 @@ def remove_saved_vehicle(request, user_id):
     data = json.loads(request.body)
     user = User.objects.get(pk=user_id)
     car = Car.objects.get(id=data.get('carID'))
-    saved_vehicle = SavedVehicles.objects.filter(user=user, saved_vehicle=car).first()
+    saved_vehicle = SavedVehicle.objects.filter(user=user, saved_vehicle=car).first()
     if saved_vehicle:
         saved_vehicle.delete()
         return JsonResponse({'success': True})
