@@ -40,6 +40,9 @@ urlpatterns = [
     path('get-saved-filters/<int:user_id>', views.get_filters),
     # path('delete-filter/<int:user_id>/<int:filter_id>', views.get_filters),
     path('declare-winner/', views.declare_winner),
+    path('user-info/<int:user_id>', views.user_info),
+    path('update-user/<int:user_id>', views.update_user),
+    path('bid-history/<int:user_id>', views.bid_history),
 
     
 ]

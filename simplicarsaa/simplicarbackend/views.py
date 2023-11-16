@@ -375,3 +375,43 @@ def declare_winner(request):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False, 'message': 'User not found'})
+
+def user_info(request, user_id):
+    user = User.objects.get(pk=user_id)
+    return JsonResponse({
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+        'is_staff': user.is_staff,
+    })
+
+@requires_csrf_token
+@api_view(['POST'])
+def update_user(request, user_id):
+    data = json.loads(request.body)
+    user = User.objects.get(pk=user_id)
+    user.first_name = data.get('first_name')
+    user.last_name = data.get('last_name')
+    user.email = data.get('email')
+    user.save()
+    #return user data
+    return JsonResponse({
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+        'is_staff': user.is_staff,
+    })
+
+def bid_history(request, user_id):
+    user = User.objects.get(pk=user_id)
+    bids = Bid.objects.filter(bidder=user)
+    data = []
+    for bid in bids:
+        data.append({
+            'id': bid.id,
+            'bid_amount': bid.bid_amount,
+            'bid_date': bid.bid_date.strftime('%d/%m/%Y'),
+            'bid_vehicle': bid.bid_vehicle.VIN,
+        })
+    
+    return JsonResponse({'bids': data})
