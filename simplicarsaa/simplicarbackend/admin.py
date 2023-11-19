@@ -3,7 +3,8 @@ from .car import Car
 from .models import Bid
 from .models import SavedVehicle
 from .models import VehicleFilter
-from .user import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class UserAdmin(admin.ModelAdmin):
     list_display = (

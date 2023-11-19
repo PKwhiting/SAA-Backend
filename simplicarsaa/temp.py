@@ -1,9 +1,11 @@
 import json
 from simplicarbackend.car import Car
 from simplicarbackend.car import AUCTION_CHOICES
-from simplicarbackend.user import User
-# import django
-# import os
+from django.contrib.auth import get_user_model
+User = get_user_model()
+import django
+import os
+from django.conf import settings
 
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'simplicarsaa.settings')
 # django.setup()

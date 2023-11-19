@@ -9,7 +9,6 @@ from django.shortcuts import render
 from django.http import HttpResponseBadRequest, JsonResponse
 
 from django.contrib.auth.models import Group
-from .user import User
 from rest_framework import viewsets
 from rest_framework import permissions
 from simplicarbackend.serializers import UserSerializer, GroupSerializer
@@ -31,6 +30,8 @@ from django.conf import settings
 from datetime import date, timedelta
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 def index(request):
     return render(request, 'index.html')
@@ -253,7 +254,6 @@ def add_vehicle(request):
         passenger_rear_window_damage=json.loads(request.POST.get('passenger_rear_window_damage', False))
         back_glass_damage=json.loads(request.POST.get('back_glass_damage', False))
         truck_bed_damage=json.loads(request.POST.get('truck_bed_damage', False))
-
 
         car = Car(
             year=year,

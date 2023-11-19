@@ -36,12 +36,14 @@ class BiddingConsumer(AsyncWebsocketConsumer):
     def update_vehicle_bid(self, data):
         from .models import Bid
         from .models import Car
-        from .user import User
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+
         try:
             userID = data.get('user_id')
             vehicleVIN = data.get('vehicle_vin')
             bidAmount = data.get('bid_amount')
-            car = Car.objects.get(VIN=vehicleVIN)
+            car = User.objects.get(VIN=vehicleVIN)
             user = User.objects.get(pk=userID)
             bid = Bid.objects.create(bid_amount=bidAmount, bidder=user, bid_vehicle=car)
             bid.save()
