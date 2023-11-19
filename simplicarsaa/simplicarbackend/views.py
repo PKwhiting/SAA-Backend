@@ -8,8 +8,8 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.http import HttpResponseBadRequest, JsonResponse
 
-from django.contrib.auth.models import User, Group
-# from .user import User
+from django.contrib.auth.models import Group
+from .user import User
 from rest_framework import viewsets
 from rest_framework import permissions
 from simplicarbackend.serializers import UserSerializer, GroupSerializer

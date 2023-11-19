@@ -1,6 +1,5 @@
 from django.db import models
-# from .user import User
-from django.contrib.auth.models import User
+from .user import User
 from .car import Car
 from django.contrib.auth import get_user_model
 User = get_user_model()
