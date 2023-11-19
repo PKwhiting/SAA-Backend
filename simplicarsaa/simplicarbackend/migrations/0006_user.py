@@ -9,7 +9,6 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0014_remove_user_phone_number'),
         ('simplicarbackend', '0005_rename_savedvehicles_savedvehicle_vehiclefilter'),
     ]
 
