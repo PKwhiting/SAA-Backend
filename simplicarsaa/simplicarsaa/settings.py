@@ -206,3 +206,5 @@ EMAIL_HOST_USER = os.environ.get('GMAIL_EMAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASS')
 EMAIL_USE_TLS = True
 
+AUTH_USER_MODEL = 'simplicarbackend.User'
+

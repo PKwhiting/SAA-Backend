@@ -1,7 +1,7 @@
 import json
 from simplicarbackend.car import Car
 from simplicarbackend.car import AUCTION_CHOICES
-from django.contrib.auth.models import User
+from simplicarbackend.user import User
 # import django
 # import os
 

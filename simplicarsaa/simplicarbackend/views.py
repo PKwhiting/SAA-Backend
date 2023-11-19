@@ -8,13 +8,13 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.http import HttpResponseBadRequest, JsonResponse
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
+from .user import User
 from rest_framework import viewsets
 from rest_framework import permissions
 from simplicarbackend.serializers import UserSerializer, GroupSerializer
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import get_token
@@ -162,11 +162,13 @@ def login_or_register(request):
     response['X-Frame-Options'] = 'DENY'  # Set the X-Frame-Options header
     if request.method == 'POST':
         data = json.loads(request.body)  # Parse JSON request data
+        print(data)
         username = data.get('username')
         password = data.get('password')
         first_name = data.get('firstName')
         last_name = data.get('lastName')
         email = data.get('email')
+        phone_number = data.get('phoneNumber')
         is_login = data.get('isLogin')
 
         if is_login:  # User login
@@ -183,7 +185,7 @@ def login_or_register(request):
         else:  # User registration
             if not User.objects.filter(username=username).exists():  # Check if username does not exist
                 try:
-                    user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
+                    user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email, phone_number=phone_number)
                     user.save()
                     return JsonResponse({'success': True, 'userID': user.id})
                 except Exception as e:
