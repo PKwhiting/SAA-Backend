@@ -3,6 +3,7 @@ from .car import Car
 from .models import Bid
 from .models import SavedVehicle
 from .models import VehicleFilter
+from .models import State
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -52,3 +53,4 @@ admin.site.register(Bid)
 admin.site.register(SavedVehicle)
 admin.site.register(VehicleFilter)
 admin.site.register(User, UserAdmin)
+admin.site.register(State)

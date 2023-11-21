@@ -1,6 +1,7 @@
 from django.db import models
 from .user import User
 from .car import Car
+from .state import State
 from django.contrib.auth import get_user_model
 User = get_user_model()
  
@@ -30,3 +31,5 @@ class VehicleFilter(models.Model):
     start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
     filter_name = models.CharField(max_length=50)
+
+

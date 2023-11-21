@@ -23,6 +23,7 @@ from .models import Car
 from .models import Bid
 from .models import SavedVehicle
 from .models import VehicleFilter
+from .state import State
 from .serializers import CarSerializer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -32,6 +33,13 @@ from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
+def get_state(state_abbreviation):
+    try:
+        state = State.objects.get(state_abbr=state_abbreviation)
+        return state
+    except State.DoesNotExist:
+        return None
 
 def index(request):
     return render(request, 'index.html')
@@ -202,7 +210,7 @@ def add_vehicle(request):
         make = request.POST.get('make')
         model = request.POST.get('model')
         VIN = request.POST.get('vin')
-        title_code = request.POST.get('titleStatus')
+        title_classification = request.POST.get('titleStatus')
         color = request.POST.get('color')
         engine = request.POST.get('engineType')
         engine_displacement = 0 if request.POST.get('displacement') == '' else request.POST.get('displacement')
@@ -213,17 +221,22 @@ def add_vehicle(request):
         fuel_type = request.POST.get('fuel')
         keys = request.POST.get('numKeys')
         mileage = request.POST.get('odometer')
+        odometer_brand = request.POST.get('odometerBranding')
         starting_bid = 0
         current_bid = 0
-        reserve_price = float(request.POST.get('reservePrice', 0)) if request.POST.get('reservePrice', '') != '' else 0
+        reserve_price = float(request.POST.get('reservePrice', 0))
+        sale_date = request.POST.get('saleDate')
         description = request.POST.get('description')
         active = False
         condition = 'Good'
-        vehicle_location = request.POST.get('location')
-        sale_date = (date.today() + timedelta((5 - date.today().weekday()) % 7)).strftime('%Y-%m-%d') + 'T12:00:00Z'
+        vehicle_zip = request.POST.get('vehicleZip')
         user = User.objects.get(pk=request.POST.get('userID'))
         vehicle_starts=json.loads(request.POST.get('vehicleRuns', False))
         vehicle_drives=json.loads(request.POST.get('vehicleDrives', False))
+        pure_sale=json.loads(request.POST.get('pureSale', False))
+        buy_it_now=json.loads(request.POST.get('buyItNow', False))
+        buy_it_now_price=float(request.POST.get('buyNowPrice', 0))
+        state=get_state(request.POST.get('vehicleState'))
         bumper_damage=json.loads(request.POST.get('bumper_damage', False))
         driver_headlight_damage=json.loads(request.POST.get('driver_headlight_damage', False))
         passenger_headlight_damage=json.loads(request.POST.get('passenger_headlight_damage', False))
@@ -260,7 +273,7 @@ def add_vehicle(request):
             make=make,
             model=model,
             VIN=VIN,
-            title_code=title_code,
+            title_classification=title_classification,
             color=color,
             engine=engine,
             engine_displacement=engine_displacement,
@@ -271,17 +284,22 @@ def add_vehicle(request):
             fuel_type=fuel_type,
             keys=keys,
             mileage=mileage,
+            odometer_brand=odometer_brand,
             starting_bid=starting_bid,
             current_bid=current_bid,
             reserve_price=reserve_price,
             description=description,
             active=active,
             condition=condition,
-            vehicle_location=vehicle_location,
+            vehicle_zip=vehicle_zip,
             sale_date=sale_date,
             creator=user,
             vehicle_starts=vehicle_starts,
             vehicle_drives=vehicle_drives,
+            pure_sale=pure_sale,
+            buy_it_now_price=buy_it_now_price,
+            buy_it_now=buy_it_now,
+            state=state,
             bumper_damage=bumper_damage,
             driver_headlight_damage=driver_headlight_damage,
             passenger_headlight_damage=passenger_headlight_damage,

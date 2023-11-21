@@ -23,8 +23,9 @@ class CarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Car
-        fields = ['id', 'auction', 'vehicle_auction_link', 'year', 'make', 'model', 'VIN', 'title_code', 'color', 'engine', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage',
-                  'starting_bid', 'current_bid', 'reserve_price', 'description', 'active', 'condition', 'vehicle_location', 'sale_date', 'last_updated', 'images', 'highest_bid',
+        fields = ['id', 'year', 'make', 'model', 'VIN', 'color', 'engine', 'engine_displacement', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage',
+                  'odometer_brand', 'starting_bid', 'current_bid', 'reserve_price', 'pure_sale', 'buy_it_now_price', 'description', 'active', 'condition', 'vehicle_zip', 'state', 'sale_date', 'last_updated',
+                  'auction', 'vehicle_auction_link', 'title_code', 'title_classification', 'creator', 'images', 'highest_bid',
                   'vehicle_starts', 'vehicle_drives', 'bumper_damage', 'driver_headlight_damage', 'passenger_headlight_damage', 'hood_damage', 'roof_damage',
                   'driver_fender_damage', 'passenger_fender_damage', 'driver_door_damage', 'passenger_door_damage', 'driver_rear_door_damage', 'passenger_rear_door_damage',
                   'driver_rocker_damage', 'passenger_rocker_damage', 'driver_rear_wheel_arch_damage', 'passenger_rear_wheel_arch_damage', 'driver_rear_quarter_damage',
