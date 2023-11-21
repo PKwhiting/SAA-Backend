@@ -176,8 +176,9 @@ def login_or_register(request):
         email = request.POST.get('email')
         is_login_str = request.POST.get('isLogin')
         is_login = is_login_str.lower() == "true"
-        images = request.FILES.getlist('images')
-        image = images[0]
+        if not is_login:
+            images = request.FILES.getlist('images')
+            image = images[0]
 
         if is_login:  # User login
             if User.objects.filter(username=username).exists():
