@@ -9,7 +9,7 @@ User = get_user_model()
 
 class UserAdmin(admin.ModelAdmin):
     list_display = (
-        'username', 'email', 'first_name', 'last_name', 'is_staff',
+        'username', 'email', 'first_name', 'last_name', 'is_staff', 'drivers_license',
         )
 
     fieldsets = (
@@ -17,7 +17,7 @@ class UserAdmin(admin.ModelAdmin):
             'fields': ('username', 'password')
         }),
         ('Personal info', {
-            'fields': ('first_name', 'last_name', 'email', 'phone_number')
+            'fields': ('first_name', 'last_name', 'email', 'phone_number', 'drivers_license')
         }),
         ('Permissions', {
             'fields': (

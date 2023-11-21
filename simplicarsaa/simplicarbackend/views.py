@@ -167,16 +167,17 @@ def update_current_bid(request):
 def login_or_register(request):
     csrf_token = get_token(request)  # Obtain the CSRF token
     response = JsonResponse({'success': False, 'message': 'Invalid request'})
-    response.set_cookie('csrftoken', csrf_token)  # Set the CSRF token in the response cookie
-    response['X-Frame-Options'] = 'DENY'  # Set the X-Frame-Options header
+    response.set_cookie('csrftoken', csrf_token)  # Set the CSRF token in the response cookier
     if request.method == 'POST':
-        data = json.loads(request.body)  # Parse JSON request data
-        username = data.get('username')
-        password = data.get('password')
-        first_name = data.get('firstName')
-        last_name = data.get('lastName')
-        email = data.get('email')
-        is_login = data.get('isLogin')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        first_name = request.POST.get('firstName')
+        last_name = request.POST.get('lastName')
+        email = request.POST.get('email')
+        is_login_str = request.POST.get('isLogin')
+        is_login = is_login_str.lower() == "true"
+        images = request.FILES.getlist('images')
+        image = images[0]
 
         if is_login:  # User login
             if User.objects.filter(username=username).exists():
@@ -192,7 +193,7 @@ def login_or_register(request):
         else:  # User registration
             if not User.objects.filter(username=username).exists():  # Check if username does not exist
                 try:
-                    user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
+                    user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email, drivers_license=image)
                     user.save()
                     return JsonResponse({'success': True, 'userID': user.id})
                 except Exception as e:
@@ -201,6 +202,7 @@ def login_or_register(request):
                 return JsonResponse({'success': False, 'message': 'Username already exists'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request'})
+
 
 @requires_csrf_token
 @api_view(['POST'])
