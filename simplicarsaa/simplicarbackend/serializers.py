@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
-from .models import Car, Bid
+from .models import Car, Bid, State
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -16,10 +16,16 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
+class StateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = State
+        fields = ['state_name']
+
 
 class CarSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     highest_bid = serializers.SerializerMethodField()
+    state = StateSerializer()
 
     class Meta:
         model = Car
