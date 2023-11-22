@@ -227,7 +227,11 @@ def add_vehicle(request):
         odometer_brand = request.POST.get('odometerBranding')
         starting_bid = 0
         current_bid = 0
-        reserve_price = float(request.POST.get('reservePrice', 0))
+        pure_sale=json.loads(request.POST.get('pureSale', False))
+        if pure_sale:
+            reserve_price = 0
+        else:
+            reserve_price = float(request.POST.get('reservePrice', 0))
         sale_date = request.POST.get('saleDate')
         description = request.POST.get('description')
         active = False
@@ -236,7 +240,6 @@ def add_vehicle(request):
         user = User.objects.get(pk=request.POST.get('userID'))
         vehicle_starts=json.loads(request.POST.get('vehicleRuns', False))
         vehicle_drives=json.loads(request.POST.get('vehicleDrives', False))
-        pure_sale=json.loads(request.POST.get('pureSale', False))
         buy_it_now=json.loads(request.POST.get('buyItNow', False))
         buy_it_now_price=float(request.POST.get('buyNowPrice', 0))
         state=get_state(request.POST.get('vehicleState'))
