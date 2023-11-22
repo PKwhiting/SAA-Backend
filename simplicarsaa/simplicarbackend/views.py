@@ -75,6 +75,8 @@ def ActiveVehicles(request):
     model = data.get('models')
     yearsStart = data['years'].get('start')
     sold = data.get('sold')
+    damageFields = data.get('damageFields')
+    vehicleStarts = data.get('vehicle_starts')
     yearsEnd = data['years'].get('end')
     if make:
         cars = cars.filter(make__icontains=make)
@@ -89,6 +91,14 @@ def ActiveVehicles(request):
     elif yearsEnd:
         end_year = int(yearsEnd)
         cars = cars.filter(year__lte=end_year)
+    
+    for category, fields in damageFields.items():
+        for field in fields:
+            if field['value']:  # Check if the field value is True
+                filter_param = {field['id']: False}
+                cars = cars.filter(**filter_param)
+
+    cars = cars.filter(vehicle_starts=vehicleStarts)
 
     today = date.today()
     if sold:
