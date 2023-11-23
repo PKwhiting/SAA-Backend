@@ -104,7 +104,7 @@ def notify_users_for_new_vehicle(vehicle):
         for field, value in damage_fields.items():
             for item in value:
                 field = item.get('id')
-                if getattr(vehicle, field) != item.get('value'):
+                if getattr(vehicle, field) == item.get('value'):
                     break
         else:
             send_vehicle_notification(filter.user, vehicle)
