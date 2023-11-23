@@ -104,6 +104,7 @@ def notify_users_for_new_vehicle(vehicle):
         for field, value in damage_fields.items():
             for item in value:
                 field = item.get('id')
+                # damage fields in the filter are backward, a true on a part means it has no damage
                 if getattr(vehicle, field) == item.get('value'):
                     break
         else:
@@ -296,7 +297,9 @@ def add_vehicle(request):
         vehicle_starts=json.loads(request.POST.get('vehicleRuns', False))
         vehicle_drives=json.loads(request.POST.get('vehicleDrives', False))
         buy_it_now=json.loads(request.POST.get('buyItNow', False))
-        buy_it_now_price=float(request.POST.get('buyNowPrice', 0))
+        buy_it_now_price = float(request.POST.get('buyNowPrice', 0))
+        if buy_it_now_price == "":
+            buy_it_now_price = 0
         state=get_state(request.POST.get('vehicleState'))
         bumper_damage=json.loads(request.POST.get('bumper_damage', False))
         driver_headlight_damage=json.loads(request.POST.get('driver_headlight_damage', False))
