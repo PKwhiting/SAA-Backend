@@ -401,7 +401,7 @@ def add_vehicle(request):
             setattr(car, f"image_{i+1}", image)
 
         car.save()
-        thread = threading.Thread(target=notify_users_for_new_vehicle_async, args=(car))
+        thread = threading.Thread(target=notify_users_for_new_vehicle_async, args=(car,))
         thread.start()
         
         return JsonResponse({'success': True})
