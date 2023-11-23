@@ -2,6 +2,9 @@ import json
 import datetime
 import base64
 import os
+import asyncio
+from asgiref.sync import sync_to_async
+import threading
 
 from django.core.files.base import ContentFile
 from django.shortcuts import render
@@ -31,6 +34,9 @@ from django.conf import settings
 from datetime import date, timedelta
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
+from django.db.models import Q
+from django.urls import reverse
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -65,6 +71,45 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+def send_vehicle_notification(user, vehicle):
+    full_url = f"http://www.simpli-cars.com/single-car-view/{vehicle.id}"  # Construct the full URL
+    email_body = f"Howdy {user.first_name},\n\nA new vehicle has been added that matches your filter. Check it out:\n\n{full_url}\n\nBest regards,\nThe Auction Team"
+
+    send_mail(
+        'SimpliCars: Vehicle Filter Match',
+        email_body,
+        os.environ.get('GMAIL_EMAIL'),
+        [user.email]
+    )
+
+def notify_users_for_new_vehicle_async(vehicle):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    asyncio.run(notify_users_for_new_vehicle(vehicle))
+
+
+@sync_to_async
+def notify_users_for_new_vehicle(vehicle):
+    filters = VehicleFilter.objects.filter(
+        Q(make=vehicle.make) | Q(make__isnull=True) | Q(make=""),
+        Q(model=vehicle.model) | Q(model__isnull=True) | Q(model=""),
+        Q(vehicle_starts=vehicle.vehicle_starts) | Q(vehicle_starts__isnull=True),
+        Q(start_year__lte=vehicle.year) | Q(start_year__isnull=True),
+        Q(end_year__gte=vehicle.year) | Q(end_year__isnull=True),
+    )
+
+    for filter in filters:
+        damage_fields = json.loads(filter.damageFields)
+        for field, value in damage_fields.items():
+            for item in value:
+                field = item.get('id')
+                if getattr(vehicle, field) != item.get('value'):
+                    break
+        else:
+            send_vehicle_notification(filter.user, vehicle)
+                
+
 
 @requires_csrf_token
 @api_view(['POST'])
@@ -353,6 +398,9 @@ def add_vehicle(request):
             setattr(car, f"image_{i+1}", image)
 
         car.save()
+        thread = threading.Thread(target=notify_users_for_new_vehicle_async, args=(cars[0],))
+        thread.start()
+        
         return JsonResponse({'success': True})
     else:
         return HttpResponseBadRequest('Invalid request method')
@@ -364,15 +412,27 @@ def save_filter(request, user_id):
     user = User.objects.get(pk=user_id)
     make = data['filters'].get('make')
     model = data['filters'].get('model')
+    damageFields = json.dumps(data['damageFields'])  # Convert to JSON string
     start_year = data['filters']['year'].get('start')
+    if start_year == '':
+        start_year = 0
     end_year = data['filters']['year'].get('end')
+    if end_year == '':
+        end_year = 3000
     filter_name = data.get('name')
 
-    filter, created = VehicleFilter.objects.get_or_create(user=user, make=make, model=model, start_year=start_year, end_year=end_year, filter_name=filter_name)
+    # Validate `damageFields` as JSON
+    try:
+        json.loads(damageFields)
+    except json.JSONDecodeError as e:
+        return JsonResponse({'success': False, 'message': f'Invalid JSON in damageFields: {str(e)}'})
+
+    filter, created = VehicleFilter.objects.get_or_create(user=user, make=make, model=model, start_year=start_year, end_year=end_year, damageFields=damageFields, filter_name=filter_name)
     if created:
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False, 'message': 'Filter already exists'})
+    
 
 def get_filters(request, user_id):
     user = User.objects.get(pk=user_id)

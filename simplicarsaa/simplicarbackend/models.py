@@ -30,6 +30,11 @@ class VehicleFilter(models.Model):
     model = models.CharField(max_length=50, blank=True, null=True)
     start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
+    vehicle_starts = models.BooleanField(default=False)
+    damageFields = models.TextField(blank=True, null=True)
     filter_name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.filter_name
 
 
