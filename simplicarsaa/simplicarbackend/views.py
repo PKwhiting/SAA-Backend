@@ -73,7 +73,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 def send_vehicle_notification(user, vehicle):
-    print("HERE")
     full_url = f"http://www.simpli-cars.com/single-car-view/{vehicle.id}"  # Construct the full URL
     email_body = f"Howdy {user.first_name},\n\nA new vehicle has been added that matches your filter. Check it out:\n\n{full_url}\n\nBest regards,\nThe Auction Team"
 
@@ -92,7 +91,6 @@ def notify_users_for_new_vehicle_async(vehicle):
 
 @sync_to_async
 def notify_users_for_new_vehicle(vehicle):
-    car = VehicleFilter.objects.first()
     filters = VehicleFilter.objects.filter(
         (Q(make=vehicle.make) | Q(make__isnull=True) | Q(make="")) &
         (Q(model=vehicle.model) | Q(model__isnull=True) | Q(model="")) &
@@ -100,16 +98,18 @@ def notify_users_for_new_vehicle(vehicle):
         (Q(start_year__lte=vehicle.year) | Q(start_year__isnull=True)) &
         (Q(end_year__gte=vehicle.year) | Q(end_year__isnull=True))
     )
-
+    print(filters)
     for filter in filters:
         damage_fields = json.loads(filter.damageFields)
         for field, value in damage_fields.items():
             for item in value:
                 field_id = item.get('id')
-                if getattr(vehicle, field_id) == item.get('value'):
-                    break
-            else:
-                send_vehicle_notification(filter.user, vehicle)
+                if getattr(vehicle, field_id):
+                    print("TACOS")
+                    if getattr(vehicle, field_id) == item.get('value'):
+                        break
+        else:
+            send_vehicle_notification(filter.user, vehicle)
 
 
 @requires_csrf_token
