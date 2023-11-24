@@ -92,25 +92,24 @@ def notify_users_for_new_vehicle_async(vehicle):
 
 @sync_to_async
 def notify_users_for_new_vehicle(vehicle):
+    car = VehicleFilter.objects.first()
     filters = VehicleFilter.objects.filter(
-        Q(make=vehicle.make) | Q(make__isnull=True) | Q(make=""),
-        Q(model=vehicle.model) | Q(model__isnull=True) | Q(model=""),
-        Q(vehicle_starts=vehicle.vehicle_starts) | Q(vehicle_starts__isnull=True),
-        Q(start_year__lte=vehicle.year) | Q(start_year__isnull=True),
-        Q(end_year__gte=vehicle.year) | Q(end_year__isnull=True),
+        (Q(make=vehicle.make) | Q(make__isnull=True) | Q(make="")) &
+        (Q(model=vehicle.model) | Q(model__isnull=True) | Q(model="")) &
+        (Q(vehicle_starts=vehicle.vehicle_starts) | Q(vehicle_starts=False)) &
+        (Q(start_year__lte=vehicle.year) | Q(start_year__isnull=True)) &
+        (Q(end_year__gte=vehicle.year) | Q(end_year__isnull=True))
     )
 
     for filter in filters:
         damage_fields = json.loads(filter.damageFields)
         for field, value in damage_fields.items():
             for item in value:
-                field = item.get('id')
-                # damage fields in the filter are backward, a true on a part means it has no damage
-                if getattr(vehicle, field) == item.get('value'):
+                field_id = item.get('id')
+                if getattr(vehicle, field_id) == item.get('value'):
                     break
-        else:
-            send_vehicle_notification(filter.user, vehicle)
-                
+            else:
+                send_vehicle_notification(filter.user, vehicle)
 
 
 @requires_csrf_token
@@ -298,8 +297,10 @@ def add_vehicle(request):
         vehicle_starts=json.loads(request.POST.get('vehicleRuns', False))
         vehicle_drives=json.loads(request.POST.get('vehicleDrives', False))
         buy_it_now=json.loads(request.POST.get('buyItNow', False))
-        buy_it_now_price = float(request.POST.get('buyNowPrice', 0))
-        if buy_it_now_price == "":
+        buy_it_now_price = request.POST.get('buyNowPrice', '')
+        if buy_it_now_price != '':
+            buy_it_now_price = float(buy_it_now_price)
+        else:
             buy_it_now_price = 0
         state=get_state(request.POST.get('vehicleState'))
         bumper_damage=json.loads(request.POST.get('bumper_damage', False))
