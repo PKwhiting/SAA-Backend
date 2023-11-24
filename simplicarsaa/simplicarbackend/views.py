@@ -73,6 +73,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 def send_vehicle_notification(user, vehicle):
+    print("HERE")
     full_url = f"http://www.simpli-cars.com/single-car-view/{vehicle.id}"  # Construct the full URL
     email_body = f"Howdy {user.first_name},\n\nA new vehicle has been added that matches your filter. Check it out:\n\n{full_url}\n\nBest regards,\nThe Auction Team"
 
