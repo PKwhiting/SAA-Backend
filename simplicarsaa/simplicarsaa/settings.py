@@ -171,7 +171,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://saa-frontend-zzoy.onrender.com',
     'https://www.simpli-cars.com',
     'http://www.simpli-cars.com',
-    'https://o4506183471923200.ingest.sentry.io'
 ]
 CORS_ALLOW_HEADERS = [
     'accept',
