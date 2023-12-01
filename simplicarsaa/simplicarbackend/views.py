@@ -120,6 +120,7 @@ def ActiveVehicles(request):
     make = data.get('makes')
     model = data.get('models')
     titleStatus = data.get('titleStatus')
+    odometerBrand = data.get('odometerBrand')
     yearsStart = data['years'].get('start')
     sold = data.get('sold')
     damageFields = data.get('damageFields')
@@ -131,6 +132,8 @@ def ActiveVehicles(request):
         cars = cars.filter(model__icontains=model)
     if titleStatus:
         cars = cars.filter(title_classification=titleStatus)
+    if odometerBrand:
+        cars = cars.filter(odometer_brand=odometerBrand)
     if yearsStart and yearsEnd:
         start_year, end_year = int(yearsStart), int(yearsEnd)
         cars = cars.filter(year__gte=start_year, year__lte=end_year)
@@ -421,6 +424,8 @@ def save_filter(request, user_id):
     make = data['filters'].get('make')
     model = data['filters'].get('model')
     vehicleStarts = data['filters'].get('vehicleStarts')
+    title_classification = data['filters'].get('titleStatus')
+    odometer_brand = data['filters'].get('odometerBrand')
     damageFields = json.dumps(data['damageFields'])  # Convert to JSON string
     start_year = data['filters']['year'].get('start')
     if start_year == '':
@@ -436,7 +441,7 @@ def save_filter(request, user_id):
     except json.JSONDecodeError as e:
         return JsonResponse({'success': False, 'message': f'Invalid JSON in damageFields: {str(e)}'})
 
-    filter, created = VehicleFilter.objects.get_or_create(user=user, make=make, model=model, start_year=start_year, end_year=end_year, vehicle_starts=vehicleStarts ,damageFields=damageFields, filter_name=filter_name)
+    filter, created = VehicleFilter.objects.get_or_create(user=user, make=make, model=model, start_year=start_year, end_year=end_year, vehicle_starts=vehicleStarts ,damageFields=damageFields, filter_name=filter_name, title_classification=title_classification, odometer_brand=odometer_brand)
     if created:
         return JsonResponse({'success': True})
     else:
@@ -456,6 +461,8 @@ def get_filters(request, user_id):
             'end': filter.end_year,
             'name': filter.filter_name,
             'vehicleStarts': filter.vehicle_starts,
+            'titleStatus': filter.title_classification,
+            'odometerBrand': filter.odometer_brand,
             'damageFields': json.loads(filter.damageFields),
         })
     return JsonResponse({'filters': data})

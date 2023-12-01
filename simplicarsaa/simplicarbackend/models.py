@@ -3,6 +3,8 @@ from .user import User
 from .car import Car
 from .state import State
 from django.contrib.auth import get_user_model
+from .car import TITLE_CHOICES
+from .car import ODOMETER_BRAND_CHOICES
 User = get_user_model()
  
 
@@ -31,6 +33,8 @@ class VehicleFilter(models.Model):
     start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
     vehicle_starts = models.BooleanField(default=False)
+    title_classification = models.CharField(max_length=100, choices=TITLE_CHOICES, default='CLEAN')
+    odometer_brand = models.CharField(max_length=100, blank=True, choices=ODOMETER_BRAND_CHOICES)
     damageFields = models.TextField(blank=True, null=True)
     filter_name = models.CharField(max_length=50)
     
