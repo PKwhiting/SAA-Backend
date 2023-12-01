@@ -417,6 +417,7 @@ def save_filter(request, user_id):
     user = User.objects.get(pk=user_id)
     make = data['filters'].get('make')
     model = data['filters'].get('model')
+    vehicleStarts = data['filters'].get('vehicleStarts')
     damageFields = json.dumps(data['damageFields'])  # Convert to JSON string
     start_year = data['filters']['year'].get('start')
     if start_year == '':
@@ -432,7 +433,7 @@ def save_filter(request, user_id):
     except json.JSONDecodeError as e:
         return JsonResponse({'success': False, 'message': f'Invalid JSON in damageFields: {str(e)}'})
 
-    filter, created = VehicleFilter.objects.get_or_create(user=user, make=make, model=model, start_year=start_year, end_year=end_year, damageFields=damageFields, filter_name=filter_name)
+    filter, created = VehicleFilter.objects.get_or_create(user=user, make=make, model=model, start_year=start_year, end_year=end_year, vehicle_starts=vehicleStarts ,damageFields=damageFields, filter_name=filter_name)
     if created:
         return JsonResponse({'success': True})
     else:
@@ -451,6 +452,8 @@ def get_filters(request, user_id):
             'start': filter.start_year,
             'end': filter.end_year,
             'name': filter.filter_name,
+            'vehicleStarts': filter.vehicle_starts,
+            'damageFields': json.loads(filter.damageFields),
         })
     return JsonResponse({'filters': data})
 
