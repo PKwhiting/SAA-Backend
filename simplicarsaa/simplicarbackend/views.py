@@ -119,6 +119,7 @@ def ActiveVehicles(request):
     data = json.loads(request.body)
     make = data.get('makes')
     model = data.get('models')
+    titleStatus = data.get('titleStatus')
     yearsStart = data['years'].get('start')
     sold = data.get('sold')
     damageFields = data.get('damageFields')
@@ -128,6 +129,8 @@ def ActiveVehicles(request):
         cars = cars.filter(make__icontains=make)
     if model:
         cars = cars.filter(model__icontains=model)
+    if titleStatus:
+        cars = cars.filter(title_classification=titleStatus)
     if yearsStart and yearsEnd:
         start_year, end_year = int(yearsStart), int(yearsEnd)
         cars = cars.filter(year__gte=start_year, year__lte=end_year)
@@ -137,14 +140,14 @@ def ActiveVehicles(request):
     elif yearsEnd:
         end_year = int(yearsEnd)
         cars = cars.filter(year__lte=end_year)
-    
+
     for category, fields in damageFields.items():
         for field in fields:
             if field['value']:  # Check if the field value is True
                 filter_param = {field['id']: False}
                 cars = cars.filter(**filter_param)
-
-    cars = cars.filter(vehicle_starts=vehicleStarts)
+    if vehicleStarts:
+        cars = cars.filter(vehicle_starts=vehicleStarts)
 
     today = date.today()
     if sold:
