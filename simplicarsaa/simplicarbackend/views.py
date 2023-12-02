@@ -494,23 +494,27 @@ def user_info(request, user_id):
         'first_name': user.first_name,
         'last_name': user.last_name,
         'email': user.email,
+        'phone': user.phone_number,
+        'licensePhoto': user.drivers_license.url if user.drivers_license else None,
         'is_staff': user.is_staff,
     })
 
-@requires_csrf_token
 @api_view(['POST'])
 def update_user(request, user_id):
-    data = json.loads(request.body)
     user = User.objects.get(pk=user_id)
-    user.first_name = data.get('first_name')
-    user.last_name = data.get('last_name')
-    user.email = data.get('email')
+    user.first_name = request.data.get('first_name')
+    user.last_name = request.data.get('last_name')
+    user.email = request.data.get('email')
+    user.phone_number = request.data.get('phone')
+    user.drivers_license = request.FILES.get('licensePhoto')
     user.save()
-    #return user data
+
     return JsonResponse({
         'first_name': user.first_name,
         'last_name': user.last_name,
         'email': user.email,
+        'phone': user.phone_number,
+        'licensePhoto': user.drivers_license.url if user.drivers_license else None,
         'is_staff': user.is_staff,
     })
 
