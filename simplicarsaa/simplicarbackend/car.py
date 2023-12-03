@@ -109,7 +109,9 @@ class Car(models.Model):
     # Undamages/usable parts
     vehicle_starts = models.BooleanField(default=False)
     vehicle_drives = models.BooleanField(default=False)
+    airbags_deployed = models.BooleanField(default=False)
     bumper_damage = models.BooleanField(default=False)
+    grille_damage = models.BooleanField(default=False)
     driver_headlight_damage = models.BooleanField(default=False)
     passenger_headlight_damage = models.BooleanField(default=False)
     hood_damage = models.BooleanField(default=False)
