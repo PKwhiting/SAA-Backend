@@ -105,11 +105,10 @@ def notify_users_for_new_vehicle(vehicle):
             for item in value:
                 field_id = item.get('id')
                 if getattr(vehicle, field_id):
-                    print("TACOS")
                     if getattr(vehicle, field_id) == item.get('value'):
                         break
-        else:
-            send_vehicle_notification(filter.user, vehicle)
+    else:
+        send_vehicle_notification(filter.user, vehicle)
 
 
 @requires_csrf_token
