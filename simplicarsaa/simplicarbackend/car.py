@@ -141,6 +141,7 @@ class Car(models.Model):
     passenger_rear_window_damage = models.BooleanField(default=False)
     back_glass_damage = models.BooleanField(default=False)
     truck_bed_damage = models.BooleanField(default=False)
+    all_over_damage = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.year} {self.make} {self.model} - {self.VIN}'
