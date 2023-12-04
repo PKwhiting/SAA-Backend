@@ -38,7 +38,6 @@ TITLE_CHOICES = [
 ]
 
 class Car(models.Model):
-    # Vehicle details
     year = models.IntegerField()
     make = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -49,11 +48,7 @@ class Car(models.Model):
     cylinders = models.IntegerField(blank=True)
     transmission = models.CharField(max_length=100, blank=True)
     drive_type = models.CharField(max_length=100, blank=True)
-
-    #SUV/Truck/Sedan
     vehicle_type = models.CharField(max_length=100, blank=True)
-
-
     fuel_type = models.CharField(max_length=100, blank=True)
     keys = models.IntegerField(blank=True, null=True)
     mileage = models.IntegerField()
@@ -71,20 +66,11 @@ class Car(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE, blank=True, null=True)
     sale_date = models.DateTimeField()
     last_updated = models.DateTimeField(auto_now=True)
-
-    # Auction details
     auction = models.CharField(max_length=100, choices=AUCTION_CHOICES, default='SAA')
     vehicle_auction_link = models.CharField(max_length=100, blank=True, null=True)
-
-    # Title details
     title_classification = models.CharField(max_length=100, choices=TITLE_CHOICES, default='CLEAN')
     title_note = models.CharField(max_length=100, blank=True)
-    
-
-    # Creator details
     creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-
-    # Images
     image_1 = models.ImageField(upload_to='cars', blank=True)
     image_2 = models.ImageField(upload_to='cars', blank=True)
     image_3 = models.ImageField(upload_to='cars', blank=True)
@@ -105,12 +91,11 @@ class Car(models.Model):
     image_8_url = models.URLField(blank=True, null=True)
     image_9_url = models.URLField(blank=True, null=True)
     image_10_url = models.URLField(blank=True, null=True)
-
-    # Undamages/usable parts
     vehicle_starts = models.BooleanField(default=False)
     vehicle_drives = models.BooleanField(default=False)
     airbags_deployed = models.BooleanField(default=False)
-    bumper_damage = models.BooleanField(default=False)
+    front_bumper_damage = models.BooleanField(default=False)
+    radiator_support_damage = models.BooleanField(default=False)
     grille_damage = models.BooleanField(default=False)
     driver_headlight_damage = models.BooleanField(default=False)
     passenger_headlight_damage = models.BooleanField(default=False)
@@ -128,7 +113,10 @@ class Car(models.Model):
     passenger_rear_wheel_arch_damage = models.BooleanField(default=False)
     driver_rear_quarter_damage = models.BooleanField(default=False)
     passenger_rear_quarter_damage = models.BooleanField(default=False)
-    trunk_damage = models.BooleanField(default=False)
+    deck_lid_damage = models.BooleanField(default=False)
+    tailgate_damage = models.BooleanField(default=False)
+    hatch_damage = models.BooleanField(default=False)
+    truck_bed_damage = models.BooleanField(default=False)
     rear_bumper_damage = models.BooleanField(default=False)
     driver_tail_light_damage = models.BooleanField(default=False)
     passenger_tail_light_damage = models.BooleanField(default=False)
@@ -140,7 +128,6 @@ class Car(models.Model):
     driver_rear_window_damage = models.BooleanField(default=False)
     passenger_rear_window_damage = models.BooleanField(default=False)
     back_glass_damage = models.BooleanField(default=False)
-    truck_bed_damage = models.BooleanField(default=False)
     all_over_damage = models.BooleanField(default=False)
 
     def __str__(self):

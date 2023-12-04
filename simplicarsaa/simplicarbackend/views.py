@@ -308,7 +308,9 @@ def add_vehicle(request):
         else:
             buy_it_now_price = 0
         state=get_state(request.POST.get('vehicleState'))
-        bumper_damage=json.loads(request.POST.get('bumper_damage', False))
+        airbags_deployed=json.loads(request.POST.get('airbagsDeployed', False))
+        front_bumper_damage=json.loads(request.POST.get('front_bumper_damage', False))
+        radiator_support_damage=json.loads(request.POST.get('radiator_support_damage', False))
         driver_headlight_damage=json.loads(request.POST.get('driver_headlight_damage', False))
         passenger_headlight_damage=json.loads(request.POST.get('passenger_headlight_damage', False))
         hood_damage=json.loads(request.POST.get('hood_damage', False))
@@ -325,7 +327,10 @@ def add_vehicle(request):
         passenger_rear_wheel_arch_damage=json.loads(request.POST.get('passenger_rear_wheel_arch_damage', False))
         driver_rear_quarter_damage=json.loads(request.POST.get('driver_rear_quarter_damage', False))
         passenger_rear_quarter_damage=json.loads(request.POST.get('passenger_rear_quarter_damage', False))
-        trunk_damage=json.loads(request.POST.get('trunk_damage', False))
+        tailgate_damage=json.loads(request.POST.get('tailgate_damage', False))
+        hatch_damage=json.loads(request.POST.get('hatch_damage', False))
+        truck_bed_damage=json.loads(request.POST.get('truck_bed_damage', False))
+        deck_lid_damage=json.loads(request.POST.get('deck_lid_damage', False))
         rear_bumper_damage=json.loads(request.POST.get('rear_bumper_damage', False))
         driver_tail_light_damage=json.loads(request.POST.get('driver_tail_light_damage', False))
         passenger_tail_light_damage=json.loads(request.POST.get('passenger_tail_light_damage', False))
@@ -337,7 +342,6 @@ def add_vehicle(request):
         driver_rear_window_damage=json.loads(request.POST.get('driver_rear_window_damage', False))
         passenger_rear_window_damage=json.loads(request.POST.get('passenger_rear_window_damage', False))
         back_glass_damage=json.loads(request.POST.get('back_glass_damage', False))
-        truck_bed_damage=json.loads(request.POST.get('truck_bed_damage', False))
 
         car = Car(
             year=year,
@@ -371,7 +375,9 @@ def add_vehicle(request):
             buy_it_now_price=buy_it_now_price,
             buy_it_now=buy_it_now,
             state=state,
-            bumper_damage=bumper_damage,
+            airbags_deployed=airbags_deployed,
+            front_bumper_damage=front_bumper_damage,
+            radiator_support_damage=radiator_support_damage,
             driver_headlight_damage=driver_headlight_damage,
             passenger_headlight_damage=passenger_headlight_damage,
             hood_damage=hood_damage,
@@ -388,7 +394,10 @@ def add_vehicle(request):
             passenger_rear_wheel_arch_damage=passenger_rear_wheel_arch_damage,
             driver_rear_quarter_damage=driver_rear_quarter_damage,
             passenger_rear_quarter_damage=passenger_rear_quarter_damage,
-            trunk_damage=trunk_damage,
+            deck_lid_damage=deck_lid_damage,
+            tailgate_damage=tailgate_damage,
+            hatch_damage=hatch_damage,
+            truck_bed_damage=truck_bed_damage,
             rear_bumper_damage=rear_bumper_damage,
             driver_tail_light_damage=driver_tail_light_damage,
             passenger_tail_light_damage=passenger_tail_light_damage,
@@ -400,7 +409,6 @@ def add_vehicle(request):
             driver_rear_window_damage=driver_rear_window_damage,
             passenger_rear_window_damage=passenger_rear_window_damage,
             back_glass_damage=back_glass_damage,
-            truck_bed_damage=truck_bed_damage
         )
 
         images = request.FILES.getlist('images')

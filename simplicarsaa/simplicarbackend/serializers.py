@@ -32,12 +32,12 @@ class CarSerializer(serializers.ModelSerializer):
         fields = ['id', 'year', 'make', 'model', 'VIN', 'color', 'engine', 'engine_displacement', 'cylinders', 'transmission', 'drive_type', 'vehicle_type', 'fuel_type', 'keys', 'mileage',
                   'odometer_brand', 'starting_bid', 'current_bid', 'reserve_price', 'pure_sale', 'buy_it_now_price', 'description', 'active', 'condition', 'vehicle_zip', 'state', 'sale_date', 'last_updated',
                   'auction', 'vehicle_auction_link', 'title_classification', 'title_classification', 'creator', 'images', 'highest_bid',
-                  'vehicle_starts', 'vehicle_drives', 'bumper_damage', 'driver_headlight_damage', 'passenger_headlight_damage', 'hood_damage', 'roof_damage',
+                  'vehicle_starts', 'vehicle_drives','airbags_deployed', 'front_bumper_damage','radiator_support_damage', 'driver_headlight_damage', 'passenger_headlight_damage', 'hood_damage', 'roof_damage',
                   'driver_fender_damage', 'passenger_fender_damage', 'driver_door_damage', 'passenger_door_damage', 'driver_rear_door_damage', 'passenger_rear_door_damage',
                   'driver_rocker_damage', 'passenger_rocker_damage', 'driver_rear_wheel_arch_damage', 'passenger_rear_wheel_arch_damage', 'driver_rear_quarter_damage',
-                  'passenger_rear_quarter_damage', 'trunk_damage', 'rear_bumper_damage', 'driver_tail_light_damage', 'passenger_tail_light_damage',
+                  'passenger_rear_quarter_damage', 'deck_lid_damage','tailgate_damage','hatch_damage','truck_bed_damage', 'rear_bumper_damage', 'driver_tail_light_damage', 'passenger_tail_light_damage',
                   'driver_mirror_damage', 'passenger_mirror_damage', 'windshield_damage', 'driver_window_damage', 'passenger_window_damage', 'driver_rear_window_damage',
-                  'passenger_rear_window_damage', 'back_glass_damage', 'truck_bed_damage']
+                  'passenger_rear_window_damage', 'back_glass_damage', 'all_over_damage']
 
     def get_images(self, car):
         request = self.context.get('request')
