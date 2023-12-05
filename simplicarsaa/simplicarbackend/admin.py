@@ -106,7 +106,7 @@ class CarAdmin(admin.ModelAdmin):
             )
         }),
         ('Other Information', {
-            'fields': ('active', 'condition', 'vehicle_zip', 'state', 'sale_date', 'auction', 'vehicle_auction_link', 'creator')
+            'fields': ('active','all_over_damage', 'condition', 'vehicle_zip', 'state', 'sale_date', 'auction', 'vehicle_auction_link', 'creator')
         }),
         ('Pricing', {
             'fields': ('starting_bid', 'current_bid', 'reserve_price', 'pure_sale', 'buy_it_now', 'buy_it_now_price')
