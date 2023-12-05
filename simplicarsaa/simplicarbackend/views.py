@@ -237,9 +237,6 @@ def login_or_register(request):
         email = request.POST.get('email')
         is_login_str = request.POST.get('isLogin')
         is_login = is_login_str.lower() == "true"
-        if not is_login:
-            images = request.FILES.getlist('images')
-            image = images[0]
 
         if is_login:  # User login
             if User.objects.filter(username=username).exists():
@@ -255,7 +252,7 @@ def login_or_register(request):
         else:  # User registration
             if not User.objects.filter(username=username).exists():  # Check if username does not exist
                 try:
-                    user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email, drivers_license=image)
+                    user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
                     user.save()
                     return JsonResponse({'success': True, 'userID': user.id})
                 except Exception as e:
