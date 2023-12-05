@@ -72,7 +72,7 @@ class CarAdmin(admin.ModelAdmin):
                 'driver_headlight_damage', 'driver_fender_damage', 'driver_door_damage',
                 'driver_rear_door_damage', 'driver_rocker_damage', 'driver_rear_wheel_arch_damage',
                 'driver_rear_quarter_damage', 'driver_mirror_damage', 'driver_window_damage',
-                'driver_rear_window_damage'
+                'driver_rear_window_damage','driver_tail_light_damage'
             )
         }),
         ('Damage Information - Passenger Panels', {
@@ -80,7 +80,7 @@ class CarAdmin(admin.ModelAdmin):
                 'passenger_headlight_damage', 'passenger_fender_damage', 'passenger_door_damage',
                 'passenger_rear_door_damage', 'passenger_rocker_damage', 'passenger_rear_wheel_arch_damage',
                 'passenger_rear_quarter_damage', 'passenger_mirror_damage', 'passenger_window_damage',
-                'passenger_rear_window_damage'
+                'passenger_rear_window_damage','passenger_tail_light_damage'
             )
         }),
         ('Damage Information - Front Panels', {
@@ -96,8 +96,8 @@ class CarAdmin(admin.ModelAdmin):
         }),
         ('Damage Information - Glass', {
             'fields': (
-                'windshield_damage', 'back_glass_damage', 'driver_tail_light_damage',
-                'passenger_tail_light_damage'
+                'windshield_damage', 'back_glass_damage',
+                
             )
         }),
         ('Damage Information - Interior', {
