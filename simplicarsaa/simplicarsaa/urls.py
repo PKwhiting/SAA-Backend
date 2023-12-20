@@ -9,6 +9,7 @@ from simplicarbackend.views import saved_vehicles
 from simplicarbackend.views import add_saved_vehicle
 from simplicarbackend.views import remove_saved_vehicle
 from simplicarbackend.views import get_filters
+from simplicarbackend.views import contact_form
 from django.conf import settings
 from django.conf.urls.static import static
 from simplicarbackend.consumers import BiddingConsumer
@@ -43,6 +44,7 @@ urlpatterns = [
     path('user-info/<int:user_id>', views.user_info),
     path('update-user/<int:user_id>', views.update_user),
     path('bid-history/<int:user_id>', views.bid_history),
+    path('contact', views.contact_form),
 
     
 ]

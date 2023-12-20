@@ -26,6 +26,7 @@ creator = User.objects.get(username='pattenwhiting')
 for car in car_data:
     try:
         if car['vehicleCategory'] == 'Automobile' and car['saleDateTimeLeft']['isTimeLeft']:
+            
             location = car.get('saleLocation', {})
             state_code = location.get('stateCode', '')
             state = get_state(state_code) if state_code else None
@@ -64,7 +65,7 @@ for car in car_data:
                 description=car.get('description', ''),
                 condition=f'{car.get("primaryDamage", "")} {car.get("secondaryDamage", "")}',
                 state=state,
-                active=False,
+                active=True,
                 sale_date=car.get('saleDate', ''),
                 vehicle_auction_link=f'https://www.copart.com/lot/{car["id"]}',
                 image_1_url=car.get('images', [{}])[0].get('full', None),

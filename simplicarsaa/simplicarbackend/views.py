@@ -535,3 +535,21 @@ def bid_history(request, user_id):
         })
     
     return JsonResponse({'bids': data})
+
+@api_view(['POST'])
+def contact_form(request):
+    try:
+        data = json.loads(request.body)
+        name = data.get('name')
+        email = data.get('email')
+        message = data.get('message')
+
+        subject = f'Contact form submission from {name}'
+        message = f'From: {name}\nEmail: {email}\n\n{message}'
+
+        send_mail(subject, message, email, [os.environ.get('GMAIL_EMAIL')])
+
+        return JsonResponse({'message': 'Email sent successfully.'}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
